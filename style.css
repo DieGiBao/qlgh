@@ -1,0 +1,224 @@
+html {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: "Roboto Slab", serif;
+  background-image: url("/images/salesworx-delivery-management-system.png");
+  background-repeat: no-repeat;
+  background-size: 1920px 650px;
+  background-position: bottom;
+}
+
+section {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#nav {
+  position: fixed;
+  background-color: rgb(39, 132, 219);
+  height: 100px;
+  width: 100%;
+  font-size: 20px;
+  
+}
+
+
+.logo-img {
+  background-image: url("/images/logo.png");
+  width: 87px;
+  height: 100px;
+  margin-top: -20px;
+  margin-left: -10px;
+}
+
+.logo {
+  padding: 35px 38px 35px 0px;
+  color: white;
+  font-size: 38px;
+  font-weight: bold;
+}
+
+.find-mentor {
+  margin: 41px 39px 12px 0px;
+  color: white;
+  font-size: 18px;
+  width: 100px;
+}
+
+#about-nav {
+  font-size: 20px;
+  margin: 22px 0px 12px 950px;
+  width:200px
+}
+
+#create-account {
+  font-weight: bold;
+  margin: 22px 0px 12px 22px;
+}
+#login-btn {
+  margin: 22px 0px 12px 22px;
+  font-weight: bold;
+}
+nav-div {
+  display: flex;
+  flex-direction: row;
+}
+
+.home-container {
+  background-color: rgb(39, 132, 219);
+  height: 298px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 100px;
+  /* h2 {
+    color: white;
+    font-weight: bold;
+    font-size: 25px;
+  }
+  p {
+    font-size: 18px;
+  } */
+}
+
+.review {
+  height: 250px;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 10px 20px;
+  margin-right: 25px;
+  width: auto;
+  background: white;
+  box-shadow: #5a5555;
+}
+
+.about-container {
+  display: flex;
+}
+
+#about {
+  background-color: white;
+}
+
+#main-footer {
+  font-size: 19px;
+  text-align: center;
+}
+
+/* Contact Session */
+.fab {
+  font-size: 100px;
+  margin-right: 50px;
+  cursor: pointer;
+  color: deeppink;
+  margin-top: 15px;
+}
+
+#text-link {
+  margin-top: 50px;
+  text-align: center;
+}
+
+.fab:hover {
+  color: black;
+}
+
+.modal {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: 580px;
+  max-width: 30%;
+}
+
+.header {
+  font-size: 22px;
+  text-align: center;
+}
+
+#or {
+  font-size: 18px;
+}
+
+#logo {
+  margin-left: 275px;
+  margin-top: 15px;
+}
+#fb-btn {
+  margin-left: 165px;
+  font-size: 19px;
+  margin-top: 8px;
+}
+#gg-btn {
+  margin-top: 20px;
+  margin-left: 177px;
+  font-size: 19px;
+}
+
+#login-btn-form {
+  margin-left: 105px;
+  margin-bottom: 5px;
+}
+
+.modal.signin {
+  height: 540px;
+}
+
+.form {
+  font-size: 19px;
+  margin-left: 140px;
+  margin-right: 120px;
+}
+
+#or1 {
+  font-size: 17px;
+}
+
+#logo1 {
+  margin-left: 275px;
+  margin-top: 15px;
+}
+#fb-btn1 {
+  margin-left: 165px;
+  font-size: 19px;
+  margin-top: 8px;
+}
+#gg-btn1 {
+  margin-top: 20px;
+  margin-left: 177px;
+  font-size: 19px;
+}
+
+#login-btn-form1 {
+  font-size: 20px;
+  margin-left: 105px;
+  margin-bottom: 5px;
+}
+
+.modal.signup {
+  height: 730px;
+}
+
+.ui.form.sign1.field {
+  font-size: 20px;
+}
+
+.ui.error.message {
+  text-align: center;
+  font-weight: bold;
+}
+
+#error-icon:after {
+  display: block;
+  background-image: url("static/img/alarm.png");
+  position: absolute;
+}
