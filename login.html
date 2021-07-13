@@ -2,81 +2,190 @@
 <html lang="en">
 
 <head>
-    
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" 
-    integrity="sha512-8bHTC73gkZ7rZ7vpqUQThUDhqcNFyYi2xgDgPDHc+GXVGHXq+xPjynxIopALmOPqzo9JZj0k6OqqewdGO3EsrQ==" 
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
+    integrity="sha512-8bHTC73gkZ7rZ7vpqUQThUDhqcNFyYi2xgDgPDHc+GXVGHXq+xPjynxIopALmOPqzo9JZj0k6OqqewdGO3EsrQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
-        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" 
-        integrity="sha512-dqw6X88iGgZlTsONxZK9ePmJEFrmHwpuMrsUChjAw1mRUhUITE5QU9pkcSox+ynfLhL15Sv2al5A0LVyDCmtUw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <link rel="stylesheet" href="styleLogin.css">
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"
+    integrity="sha512-dqw6X88iGgZlTsONxZK9ePmJEFrmHwpuMrsUChjAw1mRUhUITE5QU9pkcSox+ynfLhL15Sv2al5A0LVyDCmtUw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="styleLogin.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
 <body>
-
-    <div class="ui middle aligned center aligned grid">
-      <div class="column">
-        <h2 class="ui teal image header">
-          <img src="/images/javascript_icon.svg" class="image">
-          <div class="content">
-            Đăng nhập 
-          </div>
-        </h2>
-        <form class="ui large form">
-          <div class="ui stacked segment">
-            <div class="field">
-              <div class="ui left icon input">
-                <i class="user icon"></i>
-                <input type="text" name="email" placeholder="Địa chỉ E-mail " required>
-              </div>
-            </div>
-            <div class="field">
-              <div class="ui left icon input">
-                <i class="lock icon"></i>
-                <input type="password" name="password" placeholder="Mật khẩu " required>
-              </div>
-            </div>
-            <div class="ui fluid large teal submit button">Login</div>
-          </div>    
-          <div class="ui error message"></div>
-        </form>
-    
-        <div class="ui message">
-          Sử dụng lần đầu ? <a href="http://127.0.0.1:5500/register.html">Đăng ký ngay</a>
+  <div class="ui middle aligned center aligned grid">
+    <div class="column">
+      <h2 class="ui teal image header">
+        <img src="/images/javascript_icon.svg" class="image">
+        <div class="content">
+          Đăng nhập
         </div>
+      </h2>
+      <form class="ui large form">
+        <div class="ui stacked segment">
+          <div class="field">
+            <div class="ui left icon input">
+              <i class="user icon"></i>
+              <input type="text" name="username" placeholder="Tên đăng nhập " required>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui left icon input">
+              <i class="lock icon"></i>
+              <input type="password" name="password" placeholder="Mật khẩu " required>
+            </div>
+          </div>
+          <button class="ui fluid large teal button" , id = "login">Login</button>
+        </div>
+        <div class="ui error message"></div>
+      </form>
+
+      <div class="ui message">
+        Sử dụng lần đầu ? <a href="http://127.0.0.1:5500/register.html">Đăng ký ngay</a>
       </div>
-    </div>    
-    </body>
-    <script>
-      $('.ui.form')
-  .form({
-    fields: {
-      username: {
-        identifier: 'email',
-        rules: [
-          {
-            type   : 'empty',
-            prompt : 'Hãy nhập email'
-          }
-        ]
-      },
-      password: {
-        identifier: 'password',
-        rules: [
-          {
-            type   : 'empty',
-            prompt : 'Hãy nhập mật khẩu'
-          },
-        ]
-      },
+    </div>
+  </div>
+</body>
+<script>
+  $('.ui.form')
+    .form({
+      fields: {
+        username: {
+          identifier: 'username',
+          rules: [
+            {
+              type: 'empty',
+              prompt: 'Hãy nhập tên đăng nhập'
+            }
+          ]
+        },
+        password: {
+          identifier: 'password',
+          rules: [
+            {
+              type: 'empty',
+              prompt: 'Hãy nhập mật khẩu'
+            },
+          ]
+        },
+      }
+    })
+    ;
+</script>
+<script>
+  class AuthApp {
+
+    usernameElem = document.querySelector("[name=username]");
+    passwordElem = document.querySelector("[name=password]");
+    logOutLink = document.querySelector(".logout-link");
+
+    constructor() {
+      this.init();
     }
-  })
-;
-    </script>
+
+    init() {
+      const authUser = this.getCookie("authUser");
+
+      if (authUser) {
+        // this.modalElem.style.display = "none";
+        // this.printUserName(authUser);
+        //alert("Xin chào " + authUser);
+        window.location.href = "http://127.0.0.1:5500/admin/admin.html";
+      }
+
+      document.getElementById("login").addEventListener("click", (e) => this.login(e));
+      //this.logOutLink.addEventListener("click", (e) => this.logout(e));
+    }
+
+    login(e) {
+      e.preventDefault();
+      // this.clearErrors();
+      const userName = this.usernameElem.value.toLowerCase();
+      const password = this.passwordElem.value;
+
+      axios.get("http://192.168.1.7:8080/login", {
+        params: {
+          "username": userName,
+          "password": password
+        }
+      })
+        .then(res => {
+
+          if (res.data.length > 0) {
+            document.cookie = "authUser="+ this.usernameElem.value.toLowerCase()+ "; path=/";
+            window.location.href = "http://127.0.0.1:5500/admin/admin.html";
+          }
+
+          else {
+            this.printError(res.message);
+          }
+        })
+
+      //     fetch(this.API_URL, {
+      //         method: 'GET', 
+      //         headers: {
+      //             'Content-Type': 'application/json',
+      //             'Access-Control-Allow-Origin' : 'http://localhost:5500' 
+      //         },
+      //     })
+      //         .then((res)=>{
+      //             console.log("hell: ",res)
+      //         })
+    }
+
+    logout() {
+      this.deleteCookie("authUser");
+      location.reload();
+    }
+
+    printUserName(name) {
+      this.userElem.innerHTML = name;
+    }
+
+    printError(errorMsg, inputElem = null) {
+      // this.formErrorsElem.innerHTML = <div class="error" > ${errorMsg}</div>;
+      if (inputElem) {
+        inputElem.style.color = "red";
+      }
+    }
+
+    // clearErrors() {
+    //   this.usernameElem.style.color = "";
+    //   this.passwordElem.style.color = "";
+    //   this.formErrorsElem.innerHTML = "";
+    // }
+
+    setCookie(name, value) {
+      document.cookie = name + "=" + value;
+    }
+
+    getCookie(name) {
+      let cookie = {};
+      document.cookie.split(";").forEach(el => {
+        let [k, v] = el.split("=");
+        cookie[k.trim()] = v;
+      });
+      return cookie[name];
+    }
+
+    deleteCookie(name) {
+      document.cookie =
+        name + "=false" + "; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+    }
+
+    hideLogin() {
+      this.modalElem.classList.remove("show");
+    }
+  }
+
+  const app = new AuthApp();
+</script>
+
 </html>
