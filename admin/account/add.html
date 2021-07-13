@@ -3,72 +3,104 @@
   <html lang="en">
 
   <head>
-    <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-      <title>Admin</title>
+    <script>
+      class AuthApp {
+        constructor() {
+          this.init();
+        }
+        init() {
+          const authUser = this.getCookie("authUser");
 
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
-        integrity="sha256-9mbkOfVho3ZPXfM7W8sV2SndrGDuh7wuyLjtsWeTI1Q=" crossorigin="anonymous" />
-
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
-        integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous" />
-      <style>
-        @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap");
-
-        :root {
-          --tablet: 768px;
-          --smallMonitor: 992px;
-          --largeMonitor: 1200px;
-          --font-family: 'Open Sans', sans-serif;
+          if (!authUser) {
+            // this.modalElem.style.display = "none";
+            // this.printUserName(authUser);
+            //alert("Xin chào " + authUser);
+            window.location.href = "http://127.0.0.1:5500/login.html";
+          }
         }
 
-        body {
-          font-family: var(--font-family) !important;
-        }
 
-        body ::-webkit-scrollbar {
-          width: 6px;
+        getCookie(cname) {
+          let name = cname + "=";
+          let decodedCookie = decodeURIComponent(document.cookie);
+          let ca = decodedCookie.split(';');
+          for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+              c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+              return c.substring(name.length, c.length);
+            }
+          }
+          return "";
         }
+      }
+      const app = new AuthApp();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Admin</title>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
+      integrity="sha256-9mbkOfVho3ZPXfM7W8sV2SndrGDuh7wuyLjtsWeTI1Q=" crossorigin="anonymous" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+      integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous" />
+    <style>
+      @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap");
+
+      :root {
+        --tablet: 768px;
+        --smallMonitor: 992px;
+        --largeMonitor: 1200px;
+        --font-family: 'Open Sans', sans-serif;
+      }
+
+      body {
+        font-family: var(--font-family) !important;
+      }
+
+      body ::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .ui.vertical.menu.sidebar-menu {
+        margin-top: 40px !important;
+        max-height: calc(100% - 40px) !important;
+        height: calc(100% - 40px) !important;
+      }
+
+      .ui.vertical.menu.sidebar-menu .item i.icon {
+        float: left;
+        margin: 0em 0.5em 0em 0em;
+      }
+
+      .main-content {
+        margin-top: 40px;
+      }
+
+      @media (min-width: 768px) {
         .ui.vertical.menu.sidebar-menu {
-          margin-top: 40px !important;
-          max-height: calc(100% - 40px) !important;
-          height: calc(100% - 40px) !important;
-        }
-
-        .ui.vertical.menu.sidebar-menu .item i.icon {
-          float: left;
-          margin: 0em 0.5em 0em 0em;
+          visibility: visible;
+          -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0);
+          width: 15rem !important;
         }
 
         .main-content {
-          margin-top: 40px;
+          margin-left: 15rem;
         }
 
-        @media (min-width: 768px) {
-          .ui.vertical.menu.sidebar-menu {
-            visibility: visible;
-            -webkit-transform: translate3d(0, 0, 0);
-            transform: translate3d(0, 0, 0);
-            width: 15rem !important;
-          }
-
-          .main-content {
-            margin-left: 15rem;
-          }
-
-          .sidebar-menu-toggler {
-            display: none !important;
-          }
+        .sidebar-menu-toggler {
+          display: none !important;
         }
-      </style>
+      }
+    </style>
 
 
-      <title>Trang Chủ</title>
-
-      <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
+    <title>Trang Chủ</title>
 
   </head>
 
@@ -105,7 +137,7 @@
       <div class="right menu">
         <form:form class="ui form" action="#doSignOut">
           <a class="right item">
-            <Button class="ui button"><i class="sign-out icon"></i> Đăng xuất</Button>
+            <Button class="ui button" id="logout"><i class="sign-out icon"></i> Đăng xuất</Button>
           </a>
         </form:form>
       </div>
@@ -122,7 +154,7 @@
                 <div class="field">
                   <label>Tên user</label>
                   <input name="username" type="text">
-                </div>                
+                </div>
                 <div class="field">
                   <label>Địa chỉ</label>
                   <input name="diaChi" type="text">
@@ -180,6 +212,15 @@
       $(function () {
         $("#datepicker").datepicker();
       });
+    </script>
+
+    <script>
+      document.getElementById("logout").addEventListener("click", logout);
+      function logout() {
+        document.cookie = 'authUser =; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        alert("bye");
+        window.location.href = "http://127.0.0.1:5500/login.html";
+      };
     </script>
   </body>
 
