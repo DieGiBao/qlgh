@@ -1,9 +1,42 @@
-<%@ page pageEncoding="utf-8" %>
   <!DOCTYPE html>
   <html lang="en">
 
   <head>
-    <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+    <script>
+      class AuthApp {
+          constructor() {
+              this.init();
+          }
+          init() {
+              const authUser = this.getCookie("authUser");
+
+              if (!authUser) {
+                  // this.modalElem.style.display = "none";
+                  // this.printUserName(authUser);
+                  //alert("Xin chào " + authUser);
+                  window.location.href = "http://127.0.0.1:5500/login.html";
+              }
+          }
+
+
+          getCookie(cname) {
+              let name = cname + "=";
+              let decodedCookie = decodeURIComponent(document.cookie);
+              let ca = decodedCookie.split(';');
+              for (let i = 0; i < ca.length; i++) {
+                  let c = ca[i];
+                  while (c.charAt(0) == ' ') {
+                      c = c.substring(1);
+                  }
+                  if (c.indexOf(name) == 0) {
+                      return c.substring(name.length, c.length);
+                  }
+              }
+              return "";
+          }
+      }
+      const app = new AuthApp();
+  </script>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta http-equiv="X-UA-Compatible" content="ie=edge" />
@@ -68,8 +101,6 @@
 
       <title>Trang Chủ</title>
 
-      <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
-
   </head>
 
   <body>
@@ -105,7 +136,7 @@
       <div class="right menu">
         <form:form class="ui form" action="#doSignOut">
           <a class="right item">
-            <Button class="ui button"><i class="sign-out icon"></i> Đăng xuất</Button>
+            <Button class="ui button" id = "logout"><i class="sign-out icon"></i> Đăng xuất</Button>
           </a>
         </form:form>
       </div>
@@ -177,6 +208,15 @@
         $("#datepicker").datepicker();
       });
     </script>
+    
+<script>
+  document.getElementById("logout").addEventListener("click", logout);
+  function logout() {
+      document.cookie = 'authUser =; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+      alert("bye");
+      window.location.href = "http://127.0.0.1:5500/login.html";
+  };
+</script>
   </body>
 
   </html>
