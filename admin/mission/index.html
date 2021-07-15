@@ -66,7 +66,16 @@
         .ui.vertical.menu.sidebar-menu {
             margin-top: 40px !important;
             max-height: calc(100% - 40px) !important;
-            height: calc(100% - 40px) !important;
+            font-size: 22px;
+            padding: 10px 0px 0px 30px;
+        }
+
+        .header.item {
+            margin-left: 50px !important;
+        }
+
+        .header {
+            margin-left: -39px !important;
         }
 
         .ui.vertical.menu.sidebar-menu .item i.icon {
@@ -110,8 +119,8 @@
             </div>
             <div class="menu">
                 <a class="item" href="/admin/mission/index.html">Nhiệm vụ</a>
-                <a class="item" href="/admin/account/index.html">Tài khoản</a>
                 <a class="item" href="/admin/customer/index.html"> Khách hàng </a>
+                <a class="item" href="/admin/account/index.html">Tài khoản</a>
                 <a class="item" href="statistical">Thống kê</a>
             </div>
         </div>
@@ -133,7 +142,7 @@
         <div class="right menu">
             <form:form class="ui form" action="#doSignOut">
                 <a class="right item">
-                    <Button class="ui button" id="logout" ><i class="sign-out icon"></i> Đăng xuất</Button>
+                    <Button class="ui button" id="logout"><i class="sign-out icon"></i> Đăng xuất</Button>
                 </a>
             </form:form>
         </div>
@@ -145,59 +154,10 @@
         <div class="main-content">
             <div class="ui grid stackable padded">
                 <div class="column">
-                    <table class="ui celled padded table">
-                        <thead>
-                            <!-- đầu -->
-                            <tr>
-                                <th>Khách hàng</th>
-                                <th>Ngày nhận </th>
-                                <th>Đang giao</th>
-                            </tr>
-                        </thead>
+                    <table class="ui celled padded table" id="mission">
 
-                        <tbody>
-                            <!-- giữa -->
-                            <c:forEach var="p" items="${hoaDon}">
-                                <tr>
-                                    <td class="single line">
-                                        ${p.tenKhachHang}
-                                    </td>
-                                    <td>
-                                        ${p.ngayNhan}
-                                    </td>
-                                    <td>
-                                        ${p.trangThai}
-                                    </td>
-                                    <td>
-                                        <a href="/admin/mission/edit.html"><Button class="ui blue inverted button">
-                                                Sửa</Button></a>
-                                        <a href="#delete"><Button class="ui red inverted button"> Xóa</Button></a>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                        </tbody>
-
-                        <tfoot>
-                            <!-- chân -->
-                            <tr>
-                                <th colspan="5">
-                                    <div class="ui right floated pagination menu">
-                                        <a class="icon item">
-                                            <i class="left chevron icon"></i>
-                                        </a>
-                                        <a class="item">1</a>
-                                        <a class="item">2</a>
-                                        <a class="item">3</a>
-                                        <a class="item">4</a>
-                                        <a class="icon item">
-                                            <i class="right chevron icon"></i>
-                                        </a>
-                                    </div>
-                                </th>
-                            </tr>
-                        </tfoot>
                     </table>
-                    <a href="/admin/mission/add.html"><Button class="ui green inverted button"> Thêm</Button></a>
+
                 </div>
             </div>
         </div>
@@ -210,6 +170,133 @@
 
 </body>
 <script>
+    const api_url = "http://192.168.1.7:8080/tasks";
+
+
+
+    // Defining async function
+    async function getapi(url) {
+
+        // Storing response
+        const response = await fetch(url);
+
+        // Storing data in form of JSON
+        var data = await response.json();
+        //alert(data);
+        show(data);
+    }
+    // Calling that async function
+    getapi(api_url);
+
+    // Function to hide the loader
+    // Function to define innerHTML for HTML table
+    function show(data) {
+        let tab =
+            `
+                <thead>
+                        <tr>
+                            <th>Id Task</th>
+                            <th>Tên Công Ty Nhận </th>
+                            <th>Số điện thoại</th>
+                            <th>Địa chỉ</th>
+                            <th>Ngày nhận</th>
+                            <th>Trạng thái</th>
+                            <th> <a href="/admin/account/add.html"><Button class="ui green inverted button" style="margin-left:80px"> Thêm</Button></a></th>
+                        </tr>
+                </thead>
+                <tbody>
+                `;
+
+        // Loop to access all rows 
+        for (let r of data) {
+            let status = ""
+            if (r.approve == true) {
+                status = "Đang giao"
+            }
+            else if (r.taskpublic == true) {
+                status = "Đã hoàn thành"
+            }
+            else {
+                status = "Chưa phân công"
+            }
+            tab += `
+                        <tr> 
+                            <td>${r.id} </td>
+                            <td>${r.client.company}</td>
+                            <td>${r.client.phone}</td> 
+                            <td>${r.client.address}</td>
+                            <td>${r.pickup}</td>
+                            <td>${status}</td>
+                              <td>
+                                        <a href="/admin/mission/edit.html?id=${r.id}"><Button class="ui blue inverted button">
+                                                Sửa</Button></a>
+                                        <a href="#xoa" id="delete-account"><Button class="ui red inverted button" onclick="deleteMission(${r.id})"> Xóa</Button></a>
+                                        <a href="/admin/mission/assign.html?id=${r.id}" id="assign-task"><Button class="ui red inverted button" > Phân công</Button></a>
+                                        
+                              </td>
+                        </tr>`;
+        }
+        tab += `</tbody>
+                    <tfoot>
+                        <!-- chân -->
+                        <tr>
+                            <th colspan="5">
+                                <div class="ui right floated pagination menu">
+                                    <a class="icon item">
+                                        <i class="left chevron icon"></i>
+                                    </a>
+                                    <a class="item">1</a>
+                                    <a class="item">2</a>
+                                    <a class="item">3</a>
+                                    <a class="item">4</a>
+                                    <a class="icon item">
+                                        <i class="right chevron icon"></i>
+                                    </a>
+                                </div>
+                            </th>
+                        </tr>
+                    </tfoot>`
+        // Setting innerHTML as tab variable
+        document.getElementById("mission").innerHTML = tab;
+
+        $(".toggle-password").click(function () {
+            $(this).toggleClass("fa-eye fa-eye-slash");
+            input = $(this).parent().find("input");
+            if (input.attr("type") == "password") {
+                input.attr("type", "text");
+            } else {
+                input.attr("type", "password");
+            }
+        });
+    }
+
+</script>
+
+<script>
+
+    function deleteMission(id) {
+        // var roLe_id = $('select[name=role] option').filter(':selected').val();
+        console.log("cccc")
+        const api_url1 = "http://192.168.1.7:8080/tasks/" + id;
+        console.log("bbb")
+        $.ajax({
+            type: "DELETE",
+            url: api_url1,
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (resultData) {
+                if (resultData == "") {
+                    window.location.href = "http://127.0.0.1:5500/admin/account/index.html";
+                    alert("Save Complete");
+                }
+
+            }
+        });
+        window.location.href = "http://127.0.0.1:5500/admin/mission/index.html"
+
+    };
+
+
     document.getElementById("logout").addEventListener("click", logout);
     function logout() {
         document.cookie = 'authUser =; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';

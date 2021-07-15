@@ -68,7 +68,16 @@
         .ui.vertical.menu.sidebar-menu {
             margin-top: 40px !important;
             max-height: calc(100% - 40px) !important;
-            height: calc(100% - 40px) !important;
+           font-size: 22px;
+            padding: 10px 0px 0px 30px;
+        }
+
+        .header.item {
+            margin-left: 50px !important;
+        }
+
+        .header {
+            margin-left: -39px !important;
         }
 
         .ui.vertical.menu.sidebar-menu .item i.icon {
@@ -112,8 +121,8 @@
             </div>
             <div class="menu">
                 <a class="item" href="/admin/mission/index.html">Nhiệm vụ</a>
-                <a class="item" href="/admin/account/index.html">Tài khoản</a>
                 <a class="item" href="/admin/customer/index.html"> Khách hàng </a>
+                <a class="item" href="/admin/account/index.html">Tài khoản</a>
                 <a class="item" href="statistical">Thống kê</a>
             </div>
         </div>
@@ -147,38 +156,76 @@
         <div class="main-content">
             <div class="ui grid stackable padded">
                 <div class="column">
-                    <table class="ui celled padded table">
-                        <thead>
-                            <!-- đầu -->
+                    <table class="ui celled padded table" id="customer">
+
+                    </table>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form action="customer/edit/add.html" method="GET">
+
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"
+        integrity="sha256-t8GepnyPmw9t+foMh3mKNvcorqNHamSKtKRxxpUEgFI=" crossorigin="anonymous"></script>
+
+    <script>
+        const api_url = "http://192.168.1.7:8080/clients";
+
+
+
+        // Defining async function
+        async function getapi(url) {
+
+            // Storing response
+            const response = await fetch(url);
+
+            // Storing data in form of JSON
+            var data = await response.json();
+            //alert(data);
+            show(data);
+        }
+        // Calling that async function
+        getapi(api_url);
+        console.log(api_url)
+        // Function to hide the loader
+        // Function to define innerHTML for HTML table
+        function show(data) {
+            let tab =
+                `
+                    <thead>
                             <tr>
-                                <th>Khách hàng</th>
-                                <th>Số điện thoại </th>
-                                <th>Đia chỉ</th>
+                                <th>Mã khách hàng</th>
+                                <th>Tên khách hàng </th>
+                                <th>Số điện thoại</th>
+                                <th>Địa chỉ</th>
+                                 <th> <a href="/admin/account/add.html"><Button class="ui green inverted button" style="margin-left:25px"> Thêm</Button></a></th>
                             </tr>
-                        </thead>
+                    </thead>
+                    <tbody>
+                    `;
 
-                        <tbody>
-                            <!-- giữa -->
-                            <c:forEach var="p" items="${khachHang}">
-                                <tr>
-                                    <td class="single line">
-                                        ${p.tenKhachHang}
-                                    </td>
-                                    <td>
-                                        ${p.soDienThoai}
-                                    </td>
-                                    <td>
-                                        ${p.diaChi}
-                                    </td>
-                                    <td>
-                                        <a href="/admin/customer/edit.html"><Button class="ui blue inverted button">
+            // Loop to access all rows 
+            for (let r of data) {
+                tab += `
+                            <tr> 
+                                <td type="password">${r.clientid} </td>
+                                <td>${r.company}</td>
+                                <td>${r.phone}</td>
+                                <td>${r.address}</td> 
+                                <td>
+                                        <a href="/admin/customer/edit.html?id=${r.clientid}"><Button class="ui blue inverted button">
                                                 Sửa</Button></a>
-                                        <a href="#xoa"><Button class="ui red inverted button"> Xóa</Button></a>
+                                        <a ><Button class="ui red inverted button" onclick="deleteAccount('${r.username}')"> Xóa</Button></a>
                                     </td>
-                                </tr>
-                            </c:forEach>
-                        </tbody>
-
+                            </tr>`;
+            }
+            tab += `</tbody>
                         <tfoot>
                             <!-- chân -->
                             <tr>
@@ -194,21 +241,75 @@
                                         <a class="icon item">
                                             <i class="right chevron icon"></i>
                                         </a>
+                                        
                                     </div>
                                 </th>
                             </tr>
-                        </tfoot>
-                    </table>
-                    <a href="/admin/customer/add.html"><Button class="ui green inverted button"> Thêm</Button></a>
-                </div>
-            </div>
-        </div>
-    </div>
+                        </tfoot>`
+            // Setting innerHTML as tab variable
+            document.getElementById("customer").innerHTML = tab;
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
-        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"
-        integrity="sha256-t8GepnyPmw9t+foMh3mKNvcorqNHamSKtKRxxpUEgFI=" crossorigin="anonymous"></script>
+            $(".toggle-password").click(function () {
+                $(this).toggleClass("fa-eye fa-eye-slash");
+                input = $(this).parent().find("input");
+                if (input.attr("type") == "password") {
+                    input.attr("type", "text");
+                } else {
+                    input.attr("type", "password");
+                }
+            });
+        }
+
+    </script>
+
+    <script>
+        function deleteAccount(username) {
+            // var roLe_id = $('select[name=role] option').filter(':selected').val();
+            console.log(username)
+            const api_url1 = "http://192.168.1.7:8080/client/delete/" + username;
+            console.log("bbb")
+            $.ajax({
+                type: "POST",
+                url: api_url1,
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (resultData) {
+                    if (resultData == "") {
+                        window.location.href = "http://127.0.0.1:5500/admin/account/index.html";
+                        alert("Save Complete");
+                    }
+
+                }
+            });
+
+
+            const api_url2 = "http://192.168.1.7:8080/user/delete/" + username;
+            console.log("bbb")
+            $.ajax({
+                type: "POST",
+                url: api_url2,
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (resultData) {
+                    if (resultData == "") {
+                        window.location.href = "http://127.0.0.1:5500/admin/account/index.html";
+                        alert("Save Complete");
+                    }
+
+                }
+            });
+            window.location.href = "http://127.0.0.1:5500/admin/customer/index.html"
+
+        };
+
+
+        document.getElementById("logout").addEventListener("click", logout);
+        function logout() {
+            document.cookie = 'authUser =; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            alert("bye");
+            window.location.href = "http://127.0.0.1:5500/login.html";
+        };
+    </script>
 
     <script>
         document.getElementById("logout").addEventListener("click", logout);

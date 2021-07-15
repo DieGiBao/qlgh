@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        class AuthApp {
+            constructor() {
+                this.init();
+            }
+            init() {
+                const authUser = this.getCookie("authUser");
+
+                if (!authUser) {
+                    // this.modalElem.style.display = "none";
+                    // this.printUserName(authUser);
+                    //alert("Xin chào " + authUser);
+                    window.location.href = "http://127.0.0.1:5500/login.html";
+                }
+            }
+
+
+            getCookie(cname) {
+                let name = cname + "=";
+                let decodedCookie = decodeURIComponent(document.cookie);
+                let ca = decodedCookie.split(';');
+                for (let i = 0; i < ca.length; i++) {
+                    let c = ca[i];
+                    while (c.charAt(0) == ' ') {
+                        c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                        return c.substring(name.length, c.length);
+                    }
+                }
+                return "";
+            }
+        }
+        const app = new AuthApp();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Admin</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
+        integrity="sha256-9mbkOfVho3ZPXfM7W8sV2SndrGDuh7wuyLjtsWeTI1Q=" crossorigin="anonymous" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+        integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous" />
+    <style>
+        @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap");
+
+        :root {
+            --tablet: 768px;
+            --smallMonitor: 992px;
+            --largeMonitor: 1200px;
+            --font-family: 'Open Sans', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family) !important;
+        }
+
+        body ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .ui.vertical.menu.sidebar-menu {
+            margin-top: 40px !important;
+            max-height: calc(100% - 40px) !important;
+            font-size: 22px;
+            padding: 10px 0px 0px 30px;
+        }
+
+        .header.item {
+            margin-left: 50px !important;
+        }
+
+        .header {
+            margin-left: -39px !important;
+        }
+
+        .ui.vertical.menu.sidebar-menu .item i.icon {
+            float: left;
+            margin: 0em 0.5em 0em 0em;
+        }
+
+        .main-content {
+            margin-top: 40px;
+        }
+
+        @media (min-width: 768px) {
+            .ui.vertical.menu.sidebar-menu {
+                visibility: visible;
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+                width: 15rem !important;
+            }
+
+            .main-content {
+                margin-left: 15rem;
+            }
+
+            .sidebar-menu-toggler {
+                display: none !important;
+            }
+        }
+    </style>
+    <style type="text/css">
+        *[id$=errors] {
+            color: red;
+            font-style: italic;
+        }
+    </style>
+
+    <title>Trang Chủ</title>
+</head>
+
+<body>
+    <!-- sidebar -->
+    <div class="ui sidebar inverted vertical menu sidebar-menu" id="sidebar">
+
+        <div class="item">
+            <div class="header">
+                Administration
+            </div>
+            <div class="menu">
+                <a class="item" href="/admin/mission/index.html">Nhiệm vụ</a>
+                <a class="item" href="/admin/customer/index.html"> Khách hàng </a>
+                <a class="item" href="/admin/account/index.html">Tài khoản</a>
+                <a class="item" href="statistical">Thống kê</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- sidebar -->
+    <!-- top nav -->
+
+    <nav class="ui top fixed inverted menu">
+        <div class="left menu">
+            <a href="#" class="sidebar-menu-toggler item" data-target="#sidebar">
+                <i class="sidebar icon"></i>
+            </a>
+            <a href="admin.html" class="header item">
+                Trang chủ
+            </a>
+        </div>
+
+        <div class="right menu">
+            <form:form class="ui form" action="#doSignOut">
+                <a class="right item">
+                    <Button class="ui button" id="logout"><i class="sign-out icon"></i> Đăng xuất</Button>
+                </a>
+            </form:form>
+        </div>
+    </nav>
+
+    <!-- top nav -->
+
+    <div class="pusher">
+        <div class="main-content">
+            <div class="ui grid stackable padded">
+                <div class="column">
+                    <form class="assign-task-form">
+                        <table class="ui celled padded table" id="form-assign-task'">
+
+                        </table>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"
+        integrity="sha256-t8GepnyPmw9t+foMh3mKNvcorqNHamSKtKRxxpUEgFI=" crossorigin="anonymous"></script>
+
+    <script>
+        $('form').form({
+            on: 'blur',
+            keyboardShortcuts: false,
+            fields: {
+                tenKhachHang: {
+                    identifier: 'tenKhachHang',
+                    rules: [{
+                        type: 'empty',
+                    }]
+                },
+                dropdown: {
+                    identifier: 'trangThai',
+                    rules: [{
+                        type: 'empty',
+                    }]
+                },
+                ngayNhan: {
+                    identifier: 'ngayNhan',
+                    rules: [{
+                        type: 'empty',
+                    }]
+                }
+            }
+        });
+    </script>
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script>
+        $(function () {
+            $("#datepicker").datepicker();
+        });
+    </script>
+
+    <script>
+        let ten = ""
+
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+
+        var id = getParameterByName('id');
+
+        const api_url = "http://192.168.1.7:8080/tasks/" + id;
+
+        // Defining async function
+        async function getapi(url) {
+
+            // Storing response
+            const response = await fetch(url);
+
+            // Storing data in form of JSON
+            var data = await response.json();
+            //alert(data);
+            show(data);
+        }
+        // Calling that async function
+        getapi(api_url);
+
+        // Function to hide the loader
+        // Function to define innerHTML for HTML table
+        function show(data) {
+            let tab =
+                `
+                <thead>
+                        <tr>
+                            <th>Id Task</th>
+                            <th>Tên Công Ty Nhận </th>
+                            <th>Tài xế giao</th>
+                            <th>Ghi chú</th>
+                        </tr>
+                </thead>
+                <tbody>
+                `;
+
+            // Loop to access all rows 
+
+            let status = ""
+            if (data.approve == true) {
+                status = "Đang giao"
+            }
+            else if (data.taskpublic == true) {
+                status = "Đã hoàn thành"
+            }
+            else {
+                status = "Chưa phân công"
+            }
+            tab += `
+                        <tr> 
+  
+                        <td class="single line">
+                            <div class="ui input ">
+                                <input name="id" type="text" value="${data.id}" id="id-input" readonly>
+                            </div>
+                        </td>
+                                                            <td class="single line">
+                            <div class="ui input ">
+                                <input name="name" type="text" value="${data.client.company}" id="name-input" readonly>
+                            </div>
+                        </td>
+
+                                                                               <td class="single line">
+                            <div class="field">
+                                 <select id="mySelect" name="mySelect">
+
+                                 </select>
+                               </div>
+                        </td>
+
+
+                        <td>
+                            <div class="ui ">
+                                 <textarea name="" id="note" cols="40" rows="7"></textarea>
+                            </div>
+                        </td>
+                        
+                        </td>
+                                                            <td class="single line" style="display:none">
+                            <div class="ui input " >
+                                <input name="pickup" type="text" value="${data.pickup}" id="pickup-input" readonly>
+                            </div>
+     
+                        </td>
+
+
+                        </tr>
+                        <button class="ui blue inverted submit button" id="btn-edit" > Xác nhận phân công</button>
+                        <a href="" id="assign-task"><Button class="ui red inverted button" onclick="deleteAssign(${data.id})">Xóa phân công</Button></a>`
+                ;
+
+
+            // Setting innerHTML as tab variable
+            document.getElementById("form-assign-task'").innerHTML = tab;
+
+            // Get select
+
+        }
+    </script>
+
+    <script>
+        const api_url1 = "http://192.168.1.7:8080/users/role/1";
+
+        async function getapi(url1) {
+
+            // Storing response
+            const response = await fetch(url1);
+
+            // Storing data in form of JSON
+            var data1 = await response.json();
+            show1(data1);
+            console.log(data1)
+        }
+        getapi(api_url1)
+
+        function show1(data) {
+
+            // Get select
+            var select = document.getElementById('mySelect');
+
+            // Add options
+            data.forEach(element => {
+                $(select).append('<option value=' + element.id + '>' + element.username + ' - ' + element.name + '</option>');
+            });
+
+        }
+
+    </script>
+
+
+
+    <script>
+
+        $('.assign-task-form').form({
+
+            onSuccess: function (event) {
+                event.preventDefault();
+
+                var id_taixe = $("#mySelect").val()
+                var id_task = id;
+                var pickup = $("#pickup-input").val()
+
+                var Id = 0;
+                var Note = $("#note").val();
+                console.log("aaaa")
+                const api_url1 = "http://192.168.1.7:8080/addTaskdetails/" + id_taixe;
+
+                var data0 = {
+                    "id": 0,
+                    "start_task": null,
+                    "end_task": null,
+                    "task_note": $("#note").val(),
+                    "chat": "hello",
+                    "task": {
+                        "id": id,
+                        "pickup": $("#pickup-input").val(),
+                        "dropoff": null,
+                        "approve": true,
+                        "taskpublic": false,
+                        "cancel": false
+                    }
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: api_url1,
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data0),
+                    success: function (resultData) {
+                        alert("Save Complete");
+                    }
+                });
+
+                window.location.href = "http://127.0.0.1:5500/admin/mission/index.html"
+            }
+        })
+
+        document.getElementById("logout").addEventListener("click", logout);
+        function logout() {
+            document.cookie = 'authUser =; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            alert("bye");
+            window.location.href = "http://127.0.0.1:5500/login.html";
+        };
+    </script>
+</body>
+
+</html>

@@ -68,7 +68,16 @@
         .ui.vertical.menu.sidebar-menu {
             margin-top: 40px !important;
             max-height: calc(100% - 40px) !important;
-            height: calc(100% - 40px) !important;
+           font-size: 22px;
+            padding: 10px 0px 0px 30px;
+        }
+
+        .header.item {
+            margin-left: 50px !important;
+        }
+
+        .header {
+            margin-left: -39px !important;
         }
 
         .ui.vertical.menu.sidebar-menu .item i.icon {
@@ -117,8 +126,8 @@
             </div>
             <div class="menu">
                 <a class="item" href="/admin/mission/index.html">Nhiệm vụ</a>
-                <a class="item" href="/admin/account/index.html">Tài khoản</a>
                 <a class="item" href="/admin/customer/index.html"> Khách hàng </a>
+                <a class="item" href="/admin/account/index.html">Tài khoản</a>
                 <a class="item" href="statistical">Thống kê</a>
             </div>
         </div>
@@ -152,27 +161,91 @@
         <div class="main-content">
             <div class="ui grid stackable padded">
                 <div class="column">
-                    <form:form action="admin/mission/edit.htm" modelAttribute="nhiemVu">
-                        <table class="ui celled padded table">
+                    <form:form class="form-edit-account" action="admin/mission/edit.htm" modelAttribute="nhiemVu">
+                        <table class="ui celled padded table" id="edit-account">
 
-                            <thead>
-                                <tr>
-                                    <th>Tên user </th>
-                                    <th>Địa chỉ </th>
-                                    <th>Chức vụ</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
+                        </table>
+
+                    </form:form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"
+        integrity="sha256-t8GepnyPmw9t+foMh3mKNvcorqNHamSKtKRxxpUEgFI=" crossorigin="anonymous"></script>
+
+
+    <script>
+        let ten = ""
+
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+
+        var id = getParameterByName('id');
+
+        const api_url = "http://192.168.1.7:8080/users/" + id;
+
+        // Defining async function
+        async function getapi(url) {
+
+            // Storing response
+            const response = await fetch(url);
+
+            // Storing data in form of JSON
+            var data = await response.json();
+            //alert(data);
+            show(data);
+        }
+        // Calling that async function
+        getapi(api_url);
+
+        // Function to hide the loader
+        // Function to define innerHTML for HTML table
+        function show(data) {
+            let tab =
+                `
+                <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Tên user</th>
+                            <th>Địa chỉ </th>
+                            <th>Chức vụ</th>
+                            <th>Mật khẩu</th>
+                             <th> <a href="/admin/account/add.html"><Button class="ui green inverted button" style="margin-left:50px"> Sửa</Button></a></th>
+                        </tr>
+                </thead>
+                <tbody>
+                `;
+
+            // Loop to access all rows 
+
+            tab += `
+
+                         <tr>
                                     <td class="single line">
                                         <div class="ui input ">
-                                            <input name="username" type="text">
+                                            <input name="username" type="text" value="${data.username}" id="username-input">
+                                        </div>
+                                    </td>
+                                                                        <td class="single line">
+                                        <div class="ui input ">
+                                            <input name="name" type="text" value="${data.name}" id="name-input">
                                         </div>
                                     </td>
 
                                     <td>
                                         <div class="ui input">
-                                            <input name="diaChi" type="text">
+                                            <input name="diaChi" type="text" value="${data.address}" id="address-input">
                                         </div>
                                     </td>
 
@@ -184,24 +257,81 @@
                                             <option value="customer">Khách hàng</option>
                                         </select>
                                     </td>
-                                    <td>
-                                    </td>
+ <td><input type="password" id="password" class="form-control" value="${data.password}" >
+                            <i class="toggle-password fa fa-fw fa-eye-slash"></i></td>
                                 </tr>
-                            </tbody>
-                            <button class="ui blue inverted submit button"> Sửa</button>
-                            <tfoot>
-                            </tfoot>
-                        </table>
-                    </form:form>
-                </div>
-            </div>
-        </div>
-    </div>
+                        `;
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
-        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"
-        integrity="sha256-t8GepnyPmw9t+foMh3mKNvcorqNHamSKtKRxxpUEgFI=" crossorigin="anonymous"></script>
+            // Setting innerHTML as tab variable
+            document.getElementById("edit-account").innerHTML = tab;
+
+            $(".toggle-password").click(function () {
+                $(this).toggleClass("fa-eye fa-eye-slash");
+                input = $(this).parent().find("input");
+                if (input.attr("type") == "password") {
+                    input.attr("type", "text");
+                } else {
+                    input.attr("type", "password");
+                }
+            });
+        }
+    </script>
+    <script>
+
+
+        // Defining async function
+
+        $('.form-edit-account').form({
+
+            onSuccess: function (event) {
+                event.preventDefault();
+
+                const api_url = "http://192.168.1.7:8080/users/" + id;
+
+                async function getapi(url) {
+
+                    // Storing response
+                    const response = await fetch(url);
+
+                    // Storing data in form of JSON
+                    var data = await response.json();
+                    show(data);
+
+                }
+
+                getapi(api_url)
+                function show(data) {
+                    var Id = data.id;
+                    console.log(Id)
+                    var userName = $("#username-input").val();
+                    var Name = $("#name-input").val();
+                    var addRess = $("#address-input").val();
+                    var password = $("#password").val();
+                    var roLe_id = data.role.id;
+                    console.log("aaaa")
+                    const api_url1 = "http://192.168.1.7:8080/AddUser/" + roLe_id;
+                    console.log("bbb")
+                    $.ajax({
+                        type: "POST",
+                        url: api_url1,
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ id: Id, username: userName, password: password, name: Name, address: addRess, lat: null, lng: null }),
+                        success: function (resultData) {
+                            alert("Save Complete");
+                        }
+                    });
+                    window.location.href = "http://127.0.0.1:5500/admin/account/index.html"
+                }
+
+
+            }
+        })
+
+
+            // Calling that async function
+
+    </script>
 
     <script>
         $('form').form({
